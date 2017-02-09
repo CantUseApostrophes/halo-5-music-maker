@@ -1,0 +1,152 @@
+click(x, y, slp:=75) {
+    MouseMove %x%, %y%, 0
+    Sleep %slp%
+    Click %x%, %y%, down
+    Sleep 75
+    Click %x%, %y%, up
+}
+
+checkClick(x1, y1, x2, y2, color, type, slp:=150) {
+    count := 0
+    Loop {
+        click(x1, y1)
+        Sleep %slp%
+        PixelGetColor px, %x2%, %y2%, RGB
+        if (px = color) {
+            Break
+        }
+        count := count + 1
+        if (count > 5) {
+            count := 0
+            if (type = 2) {
+                clickPlus()
+            }
+            else if (type = 3) {
+                clickPlus()
+                clickExtras()
+            }
+            else if (type = 5) {
+                click(960, 550, 100)
+                Sleep 300
+            }
+            else if (type = 6) {
+                click(960, 550, 100)
+                Sleep 300
+                clickProperties()
+            }
+            else if (type = 7) {
+                click(960, 550, 100)
+                Sleep 300
+                clickProperties()
+                clickPosition()
+            }
+        }
+    }
+}
+
+checkClick2(x1, y1, x2, y2, color, type, slp:=150) {
+    count := 0
+    Loop {
+        click(x1, y1)
+        Sleep %slp%
+        PixelGetColor px, %x2%, %y2%, RGB
+        if (px != color) {
+            Break
+        }
+        count := count + 1
+        if (count > 5) {
+            count := 0
+            if (type = 4) {
+                clickPlus()
+                checkPlusMenu()
+            }
+        }
+    }
+}
+
+clickPlus() {
+    checkClick(1750, 40, 1600, 120, "0x636363", 1)
+}
+
+clickExtras() {
+    checkClick(1560, 345, 1591, 120, "0xFFFFFF", 2)
+}
+
+clickJoints() {
+    checkClick(1560, 315, 1586, 152, "0xFFFFFF", 3)
+}
+
+checkPlusMenu() {
+    PixelGetColor color, 1586, 150, RGB
+    if (color != "0xFDFDFD") {
+        goToJoints()
+    }
+}
+
+goToJoints() {
+    clickExtras()
+    clickJoints()
+}
+
+clickBall() {
+    checkClick2(1560, 405, 1600, 150, "0x636363", 4)
+}
+
+clickProperties() {
+    checkClick(1850, 40, 1600, 80, "0x303030", 5)
+}
+
+clickSpawnOrder() {
+    checkClick(1817, 537, 1756, 537, "0x3399FF", 6)
+}
+
+clickPosition() {
+    checkClick(1560, 315, 1530, 152, "0xA7A7A7", 6)
+}
+
+clickField1() {
+    checkClick(1813, 177, 1751, 187, "0x3399FF", 7)
+}
+
+clickField2() {
+    checkClick(1813, 205, 1751, 215, "0x3399FF", 7)
+}
+
+clickField3() {
+    checkClick(1813, 233, 1751, 243, "0x3399FF", 7)
+}
+
+clickSave() {
+    click(42, 44)
+}
+
+input(txt) {
+    Send, %txt%
+    Sleep 25
+    Send, {Enter}
+    Sleep 25
+}
+
+FormatSeconds(NumberOfSeconds) {
+    time = 19990101
+    time += %NumberOfSeconds%, seconds
+    FormatTime, mmss, %time%, mm:ss
+    SetFormat, float, 2.0
+    return NumberOfSeconds//3600 ":" mmss
+}
+
+Loop {
+    Sleep 1000
+    IfWinActive Halo 5: Forge
+    {
+        Sleep 1000
+        Break
+    }
+}
+SendMode Event
+BlockInput MouseMove
+pause_var1 := 0
+pause_var2 := 0
+StartTime := A_TickCount
+
+
